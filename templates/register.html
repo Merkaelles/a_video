@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="icon" href="/static/images/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/static/images/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <meta name="keywords" content="响应式后台模板,开源免费后台模板,Bootstrap5后台管理系统模板">
+    <meta name="description" content="Bootstrap-Admin基于bootstrap5的免费开源的响应式后台管理模板">
+    <meta name="author" content="ajiho">
+    <link rel="stylesheet" href="/static/lib/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-admin.min.css">
+    <title>Bootstrap-Admin - 开源免费响应式后台管理系统模板</title>
+</head>
+<body>
+
+<div class="min-vh-100 d-flex justify-content-center align-items-center py-3">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-sm-8 col-lg-6 col-xl-4 mx-auto">
+                <div class="card shadow border-0 bg-white">
+                    <div class="card-header bg-white border-bottom p-4 text-center">
+                        <a href="index.html" class="fs-4 text-dark text-decoration-none">
+                            Bootstrap-Admin
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        {% csrf_token %}
+                        <form id="form" class="form">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">账号</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="用户名">
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">密码</label>
+                                <input type="password" class="form-control" id="password" name="password"
+                                       placeholder="请输入密码">
+                            </div>
+                            <div class="mb-3">
+                                    <label for="password_confirm" class="form-label">确认密码</label>
+                                    <input type="text" class="form-control" id="password_confirm" name="password_confirm" data-fv-field="password_confirm" autocomplete="off">
+                                <div class="invalid-feedback" data-fv-validator="identical" data-fv-for="password_confirm" data-fv-result="NOT_VALIDATED" style="display: none;">和密码不一致</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">邮箱</label>
+                                <input type="text" class="form-control" id="email" name="email" placeholder="邮箱" data-fv-field="email" autocomplete="off">
+                            <div class="invalid-feedback" data-fv-validator="notEmpty" data-fv-for="email" data-fv-result="NOT_VALIDATED" style="display: none;">请填写必填项目</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">电话</label>
+                                <input type="text" class="form-control" id="phone" name="phone" placeholder="电话" data-fv-field="phone" autocomplete="off">
+                            <div class="invalid-feedback" data-fv-validator="notEmpty" data-fv-for="phone" data-fv-result="NOT_VALIDATED" style="display: none;">请填写必填项目</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="captcha" class="form-label">验证码</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="captcha" name="captcha"
+                                           placeholder="请输入验证码">
+                                    <img src="/user/generate_code/" alt="验证码" class="bsa-cursor-pointer"/>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                    <label for="sexRadio1" class="form-label">性别</label>
+                                    <div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="sex" id="sexRadio1" value="先生" checked="" data-fv-field="sex" autocomplete="off">
+                                            <label class="form-check-label" for="sexRadio1">先生</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="sex" id="sexRadio2" value="女士" data-fv-field="sex" autocomplete="off">
+                                            <label class="form-check-label" for="sexRadio2">女士</label>
+                                        </div>
+                                    </div>
+                                <div class="invalid-feedback" data-fv-validator="notEmpty" data-fv-for="sex" data-fv-result="NOT_VALIDATED" style="display: none;">请填写必填项目</div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                <div>                  </div>
+                                <button id="login-btn" type="submit" class="btn btn-primary">注册</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card-footer bg-white">
+                        <div class="text-center p-2 text-muted">
+                            Copyright © 2022 欲饮琵琶码上催 All right reserved.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--表单验证相关依赖-->
+<script src="/static/lib/jquery/dist/jquery.min.js"></script>
+<script src="/static/lib/formvalidation/js/formValidation.js"></script>
+<script src="/static/lib/formvalidation/js/framework/bootstrap.js"></script>
+<script src="/static/lib/formvalidation/js/language/zh_CN.js"></script>
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/bootstrap-admin.min.js"></script>
+    <script>
+        //前端表单验证
+    $('#form').formValidation({
+        fields: {
+            truename: {
+                validators: {
+                    notEmpty: true,
+                }
+            },
+            username: {
+                validators: {
+                    notEmpty: true,
+                    remote: {
+                        type: 'post',
+                        url: '/user/check_username/',
+                        header:{'X-CSRFToken':$('[name="csrfmiddlewaretoken"]').val()},
+                        data: {
+                            type: 'save',
+                        },
+                        //请求失败的消息
+                        message: "系统繁忙,请稍后再试",
+                        delay: 1000
+                    }
+                }
+            },
+            password: {},
+            password_confirm: {
+                validators: {
+                    identical: {
+                        field: 'password',
+                        message: '和密码不一致'
+                    }
+                }
+            },
+            sex: {
+                validators: {
+                    notEmpty: true,
+                }
+            },
+            phone: {
+                validators: {
+                    notEmpty: true,
+                    callback: {
+                        callback: function (value, validator, $field) {
+                            var reg1 = /^\+86-1[3-9]\d{9}$/;
+                            var reg2 = /^1[3-9]\d{9}$/;
+                            return reg1.test(value) || reg2.test(value);
+                        },
+                        message: '手机号错误'
+                    }
+                },
+            },
+            captcha:{
+                validators: {
+                    notEmpty: true,
+                    remote: {
+                        type: 'post',
+                        url: '/user/verify_code/',
+                        header:{'X-CSRFToken':$('[name="csrfmiddlewaretoken"]').val()},
+                        data: {
+                            type: 'save',
+                        },
+                        //请求失败的消息
+                        message: "验证码错误",
+                        delay: 1000
+                    }
+                }
+            },
+            email: {
+                validators: {
+                    notEmpty: true,
+                    emailAddress: {
+                        message: "email格式错误"
+                    }
+
+                }
+            },
+        }
+    }).on('success.form.fv', function (e) {
+        //阻止表单提交
+        e.preventDefault();
+        //得到表单对象
+        var $form = $(e.target);
+        let data = $form.serialize();
+
+        //得到序列化数据
+        $.ajax({
+            url: "/user/create_account/",
+            header:{'X-CSRFToken':$('[name="csrfmiddlewaretoken"]').val()},
+            method: 'post',
+            data: data,
+        }).then(function (res) {
+            if (res.code === 200) {
+                {#alert('Register Successfully, please login')#}
+                window.location.href='/user/login/'
+            } else {
+                alert('Register Failed')
+            }
+        });
+    });
+
+
+    //案例2
+    function randomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    $("#captchaProblems").html(
+        [randomNumber(1, 100), "+", randomNumber(1, 200), "="].join(" ") + "?"
+    );
+
+    $("#form2").formValidation({
+        //验证字段
+        fields: {
+            username2: {
+                validators: {
+                    notEmpty: true, //也可以像下面那样用
+                    stringLength: {
+                        min: 6,
+                        max: 30,
+                        message: "用户名的长度为6-30个字符（这是限制长度的）"
+                    },
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9_.]+$/,
+                        message: "用户名只能由字母、数字、点和下划线组成"
+                    }
+                }
+            },
+            password2: {
+                validators: {
+                    notEmpty: {
+                        message: "密码不能为空"
+                    },
+                    different: {
+                        field: "username",
+                        message: "密码不能和用户名相同"
+                    }
+                }
+            },
+            confirmPassword2: {
+                validators: {
+                    notEmpty: true,
+                    identical: {
+                        field: "password",
+                        message: "密码不一致"
+                    }
+                }
+            },
+            email2: {
+                validators: {
+                    notEmpty: {
+                        message: "电子邮件不能为空"
+                    },
+                    //验证正确的邮箱
+                    emailAddress: true
+                }
+            },
+            gender2: {
+                validators: {
+                    notEmpty: {
+                        message: "必须选择一个性别"
+                    }
+                }
+            },
+            age2: {
+                validators: {
+                    notEmpty: {
+                        message: "必须填写真实年龄"
+                    },
+                    lessThan: {
+                        value: 100,
+                        inclusive: true,
+                        message: '您是百岁老人'
+                    },
+                    greaterThan: {
+                        value: 18,
+                        inclusive: false,
+                        message: '未成年人不能进行用户注册'
+                    }
+                }
+            },
+            // 前端验证码
+            captchaAnswer: {
+                validators: {
+                    callback: {
+                        message: "计算错误，请重新验证",
+                        callback: function (value, validator, $field) {
+                            let items = $("#captchaProblems").html().split(" ");
+                            let result = parseInt(items[0]) + parseInt(items[2]);
+                            return parseInt(value) === result;
+                        }
+                    }
+                }
+            },
+            agree2: {
+                validators: {
+                    notEmpty: {
+                        message: "您必须同意我们的条款和条件"
+                    }
+                }
+            }
+        }
+    }).on('success.form.fv', function (e) {
+        //阻止表单提交
+        e.preventDefault();
+        //得到表单对象
+        var $form = $(e.target);
+        let data = $form.serialize();
+
+        //得到序列化数据
+        $.ajax({
+            url: "/reg.php",
+            method: 'post',
+            data: data,
+        }).then(function (res) {
+            if (res.code === 200) {
+                //注册成功
+            } else {
+                //注册失败
+            }
+        });
+    });
+
+
+    //案例3
+    $('#form3').formValidation({
+        fields: {
+            'languages[]': {
+                validators: {
+                    choice: {
+                        min: 2,
+                        max: 4,
+                        message: '请选择 %s - %s 个你比较擅长的语言'
+                    }
+                }
+            },
+            'editors[]': {
+                validators: {
+                    choice: {
+                        min: 2,
+                        max: 3,
+                        message: '请选择 %s - %s 个你比较喜欢的编辑器'
+                    }
+                }
+            }
+        }
+    });
+
+    </script>
+    <!--===================页面单独所需的//========================-->
+    <!--=================//mockjs假数据模拟(生产环境中请直接删除下面两个引入的js)=====================-->
+    <script src="/static/lib/mockjs/dist/mock-min.js"></script>
+    <script src="/static/js/bootstrap-admin.mock.min.js"></script>
+    <!--=================mockjs假数据模拟//=====================-->
+</body>
+
+</html>
